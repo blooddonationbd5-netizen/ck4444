@@ -64,12 +64,17 @@ export default {
           DEFAULT: "hsl(var(--gold))",
           dark: "hsl(var(--gold-dark))",
         },
-        neon: {
-          blue: "hsl(var(--neon-blue))",
-          purple: "hsl(var(--neon-purple))",
+        teal: {
+          DEFAULT: "hsl(var(--teal))",
+          light: "hsl(var(--teal-light))",
+          dark: "hsl(var(--teal-dark))",
         },
         success: "hsl(var(--success))",
         warning: "hsl(var(--warning))",
+        whatsapp: "hsl(var(--whatsapp))",
+        facebook: "hsl(var(--facebook))",
+        telegram: "hsl(var(--telegram))",
+        support: "hsl(var(--support))",
       },
       borderRadius: {
         lg: "var(--radius)",

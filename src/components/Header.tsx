@@ -1,34 +1,33 @@
-import { Bell, User, Wallet } from "lucide-react";
+import { Menu, RefreshCw } from "lucide-react";
 
 const Header = () => {
   return (
-    <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-md border-b border-border">
-      <div className="flex items-center justify-between px-4 py-3">
-        {/* Logo */}
-        <div className="flex items-center gap-2">
-          <div className="text-2xl font-bold">
-            <span className="text-gradient-gold">77</span>
-            <span className="text-primary">PG</span>
+    <header className="bg-background px-4 py-3 flex items-center justify-between border-b border-border">
+      {/* Left - Menu & Logo */}
+      <div className="flex items-center gap-3">
+        <button className="p-1">
+          <Menu className="w-6 h-6 text-foreground" />
+        </button>
+        <div className="flex items-center">
+          <span className="text-xl font-bold text-gradient-gold">CK44</span>
+          <span className="text-xl font-bold text-foreground">.COM</span>
+        </div>
+      </div>
+
+      {/* Right - Avatar & Balance */}
+      <div className="flex items-center gap-3">
+        {/* Avatar */}
+        <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-primary">
+          <div className="w-full h-full bg-gradient-gold flex items-center justify-center">
+            <span className="text-primary-foreground font-bold">U</span>
           </div>
         </div>
 
         {/* Balance */}
-        <div className="flex items-center gap-2 bg-secondary rounded-full px-4 py-2">
-          <Wallet className="w-4 h-4 text-primary" />
-          <span className="text-sm font-semibold text-foreground">৳ 0.00</span>
-        </div>
-
-        {/* Actions */}
-        <div className="flex items-center gap-3">
-          <button className="relative p-2 rounded-full bg-secondary hover:bg-muted transition-colors">
-            <Bell className="w-5 h-5 text-muted-foreground" />
-            <span className="absolute -top-1 -right-1 w-4 h-4 bg-destructive rounded-full text-[10px] flex items-center justify-center text-destructive-foreground font-bold">
-              3
-            </span>
-          </button>
-          <button className="p-2 rounded-full bg-secondary hover:bg-muted transition-colors">
-            <User className="w-5 h-5 text-muted-foreground" />
-          </button>
+        <div className="flex items-center gap-1 bg-secondary rounded-full px-3 py-1.5">
+          <span className="text-primary font-bold">৳</span>
+          <span className="text-foreground font-semibold text-sm">0.68</span>
+          <RefreshCw className="w-4 h-4 text-muted-foreground ml-1" />
         </div>
       </div>
     </header>
