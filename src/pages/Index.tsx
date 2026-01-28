@@ -1,22 +1,28 @@
+import { useState } from "react";
+import AppDownloadBanner from "@/components/AppDownloadBanner";
 import Header from "@/components/Header";
-import Marquee from "@/components/Marquee";
+import AnnouncementBar from "@/components/AnnouncementBar";
 import PromoBanner from "@/components/PromoBanner";
-import QuickActions from "@/components/QuickActions";
-import GameCategory from "@/components/GameCategory";
-import PopularGames from "@/components/PopularGames";
+import ActionButtons from "@/components/ActionButtons";
+import GameTabs from "@/components/GameTabs";
+import HotGames from "@/components/HotGames";
+import FloatingSocial from "@/components/FloatingSocial";
 import BottomNav from "@/components/BottomNav";
-import FloatingActions from "@/components/FloatingActions";
 
 const Index = () => {
+  const [activeTab, setActiveTab] = useState("hot");
+
   return (
     <div className="min-h-screen bg-background pb-24">
+      <AppDownloadBanner />
       <Header />
-      <Marquee />
+      <AnnouncementBar />
       <PromoBanner />
-      <QuickActions />
-      <GameCategory />
-      <PopularGames />
-      <FloatingActions />
+      <ActionButtons />
+      <GameTabs activeTab={activeTab} onTabChange={setActiveTab} />
+      <HotGames />
+      <HotGames />
+      <FloatingSocial />
       <BottomNav />
     </div>
   );
