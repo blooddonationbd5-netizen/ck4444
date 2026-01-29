@@ -15,9 +15,9 @@ const AdminLayout = () => {
     );
   }
 
-  // Redirect to login if not authenticated
+  // Redirect to admin login if not authenticated
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/admin-login" replace />;
   }
 
   // Redirect to home if not admin

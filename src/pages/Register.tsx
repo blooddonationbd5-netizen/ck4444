@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Eye, EyeOff, Mail, Lock, User, Users, Loader2 } from "lucide-react";
+import { Eye, EyeOff, Phone, Lock, User, Users, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -9,7 +9,7 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [referralCode, setReferralCode] = useState("");
@@ -38,16 +38,30 @@ const Register = () => {
       return;
     }
 
+    if (phone.replace(/[^0-9]/g, '').length < 10) {
+      toast({
+        title: "Error!",
+        description: "Please enter a valid mobile number.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setLoading(true);
 
     try {
+      // Format phone as email for Supabase auth (phone@user.local)
+      const cleanPhone = phone.replace(/[^0-9]/g, '');
+      const phoneEmail = `${cleanPhone}@user.local`;
+      
       const { error } = await supabase.auth.signUp({
-        email,
+        email: phoneEmail,
         password,
         options: {
           emailRedirectTo: window.location.origin,
           data: {
             full_name: fullName,
+            phone: cleanPhone,
             referral_code: referralCode,
           },
         },
@@ -103,18 +117,18 @@ const Register = () => {
             </div>
           </div>
 
-          {/* Email Input */}
+          {/* Phone Input */}
           <div className="mb-4">
             <label className="text-sm text-muted-foreground mb-2 block">
-              Email
+              Mobile Number
             </label>
             <div className="flex items-center gap-2 bg-secondary rounded-lg px-4 py-3">
-              <Mail className="w-5 h-5 text-muted-foreground" />
+              <Phone className="w-5 h-5 text-muted-foreground" />
               <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="Enter your mobile number"
                 className="flex-1 bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground"
                 required
               />
