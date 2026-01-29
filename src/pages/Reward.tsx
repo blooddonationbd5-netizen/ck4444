@@ -1,43 +1,14 @@
 import Header from "@/components/Header";
 import BottomNav from "@/components/BottomNav";
-import { Trophy, Gift, Clock, CheckCircle, Star } from "lucide-react";
-
-const rewards = [
-  {
-    id: 1,
-    title: "ডেইলি চেক-ইন বোনাস",
-    description: "প্রতিদিন চেক-ইন করে বোনাস সংগ্রহ করুন।",
-    points: 10,
-    claimed: false,
-    available: true,
-  },
-  {
-    id: 2,
-    title: "প্রথম ডিপোজিট রিওয়ার্ড",
-    description: "প্রথম ডিপোজিটে বিশেষ রিওয়ার্ড পান।",
-    points: 100,
-    claimed: true,
-    available: true,
-  },
-  {
-    id: 3,
-    title: "লেভেল আপ বোনাস",
-    description: "পরবর্তী লেভেলে পৌঁছান এবং রিওয়ার্ড পান।",
-    points: 50,
-    claimed: false,
-    available: false,
-  },
-  {
-    id: 4,
-    title: "সাপ্তাহিক লকি ড্র",
-    description: "সাপ্তাহিক লকি ড্রতে অংশ নিন।",
-    points: 200,
-    claimed: false,
-    available: true,
-  },
-];
+import { Trophy, Gift, CheckCircle, Star, Loader2 } from "lucide-react";
+import { useBonuses } from "@/hooks/useBonuses";
 
 const Reward = () => {
+  const { data: bonuses, isLoading } = useBonuses();
+  
+  // Filter active bonuses
+  const activeBonuses = bonuses?.filter(b => b.is_active) || [];
+
   return (
     <div className="min-h-screen bg-background pb-24">
       <Header />
@@ -48,8 +19,8 @@ const Reward = () => {
           <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-gold flex items-center justify-center">
             <Trophy className="w-8 h-8 text-primary-foreground" />
           </div>
-          <p className="text-muted-foreground text-sm mb-1">আপনার পয়েন্ট</p>
-          <h1 className="text-3xl font-bold text-primary">১৫০</h1>
+          <p className="text-muted-foreground text-sm mb-1">Your Points</p>
+          <h1 className="text-3xl font-bold text-primary">150</h1>
           <div className="flex items-center justify-center gap-1 mt-2">
             {[1, 2, 3, 4, 5].map((star) => (
               <Star
@@ -60,67 +31,59 @@ const Reward = () => {
               />
             ))}
           </div>
-          <p className="text-xs text-muted-foreground mt-2">লেভেল ৩ • সিলভার মেম্বার</p>
+          <p className="text-xs text-muted-foreground mt-2">Level 3 • Silver Member</p>
         </div>
 
         {/* Rewards List */}
         <h2 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
           <Gift className="w-5 h-5 text-primary" />
-          উপলব্ধ রিওয়ার্ড
+          Available Rewards
         </h2>
 
-        <div className="space-y-3">
-          {rewards.map((reward) => (
-            <div
-              key={reward.id}
-              className={`bg-card border rounded-xl p-4 ${
-                reward.claimed
-                  ? "border-green-500/30 bg-green-500/5"
-                  : reward.available
-                  ? "border-border hover:border-primary"
-                  : "border-border opacity-60"
-              } transition-colors`}
-            >
-              <div className="flex items-start justify-between mb-2">
-                <div className="flex-1">
-                  <h3 className="text-foreground font-semibold">{reward.title}</h3>
-                  <p className="text-muted-foreground text-sm mt-1">
-                    {reward.description}
-                  </p>
+        {isLoading ? (
+          <div className="flex items-center justify-center h-40">
+            <Loader2 className="w-8 h-8 animate-spin text-primary" />
+          </div>
+        ) : activeBonuses.length === 0 ? (
+          <div className="text-center py-8">
+            <Gift className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+            <p className="text-muted-foreground">No rewards available right now.</p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {activeBonuses.map((bonus) => (
+              <div
+                key={bonus.id}
+                className="bg-card border border-border rounded-xl p-4 hover:border-primary transition-colors"
+              >
+                <div className="flex items-start justify-between mb-2">
+                  <div className="flex-1">
+                    <h3 className="text-foreground font-semibold">{bonus.name}</h3>
+                    <p className="text-muted-foreground text-sm mt-1">
+                      {bonus.description || `Get ${bonus.amount} bonus!`}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-primary font-bold">{bonus.amount}</span>
+                    <p className="text-xs text-muted-foreground">{bonus.type}</p>
+                  </div>
                 </div>
-                <div className="text-right">
-                  <span className="text-primary font-bold">+{reward.points}</span>
-                  <p className="text-xs text-muted-foreground">পয়েন্ট</p>
-                </div>
-              </div>
-              <div className="flex items-center justify-between mt-3">
-                <div className="flex items-center gap-1 text-xs">
-                  {reward.claimed ? (
-                    <>
-                      <CheckCircle className="w-4 h-4 text-green-500" />
-                      <span className="text-green-500">সংগ্রহ করা হয়েছে</span>
-                    </>
-                  ) : reward.available ? (
-                    <>
-                      <Gift className="w-4 h-4 text-primary" />
-                      <span className="text-muted-foreground">সংগ্রহযোগ্য</span>
-                    </>
-                  ) : (
-                    <>
-                      <Clock className="w-4 h-4 text-muted-foreground" />
-                      <span className="text-muted-foreground">আনলক করুন</span>
-                    </>
-                  )}
-                </div>
-                {!reward.claimed && reward.available && (
+                <div className="flex items-center justify-between mt-3">
+                  <div className="flex items-center gap-1 text-xs">
+                    <CheckCircle className="w-4 h-4 text-green-500" />
+                    <span className="text-green-500">Active</span>
+                    {bonus.max_amount && (
+                      <span className="ml-2 text-muted-foreground">Max: {bonus.max_amount}</span>
+                    )}
+                  </div>
                   <button className="bg-primary text-primary-foreground px-4 py-1.5 rounded-full text-sm font-medium">
-                    সংগ্রহ করুন
+                    Claim
                   </button>
-                )}
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
 
       <BottomNav />
