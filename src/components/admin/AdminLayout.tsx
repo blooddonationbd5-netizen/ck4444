@@ -1,7 +1,30 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, Navigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { Loader2 } from "lucide-react";
 import AdminSidebar from "./AdminSidebar";
 
 const AdminLayout = () => {
+  const { user, loading, isAdmin } = useAuth();
+
+  // Show loading while checking auth
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  // Redirect to login if not authenticated
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  // Redirect to home if not admin
+  if (!isAdmin) {
+    return <Navigate to="/" replace />;
+  }
+
   return (
     <div className="min-h-screen flex w-full bg-background">
       <AdminSidebar />

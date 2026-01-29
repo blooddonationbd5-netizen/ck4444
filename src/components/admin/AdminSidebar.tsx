@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   Receipt,
@@ -25,7 +25,9 @@ import {
   Megaphone,
   Menu,
   X,
+  LogOut,
 } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
 
 interface MenuItem {
@@ -81,6 +83,8 @@ const AdminSidebar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openMenus, setOpenMenus] = useState<string[]>(["Manage Transaction"]);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { signOut } = useAuth();
 
   const toggleMenu = (title: string) => {
     setOpenMenus((prev) =>
@@ -91,6 +95,11 @@ const AdminSidebar = () => {
   };
 
   const isActive = (path: string) => location.pathname === path;
+
+  const handleLogout = async () => {
+    await signOut();
+    navigate('/login');
+  };
 
   return (
     <>
@@ -192,6 +201,17 @@ const AdminSidebar = () => {
             </div>
           ))}
         </nav>
+
+        {/* Logout Button */}
+        <div className="p-3 border-t border-border">
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors text-destructive hover:bg-destructive/10"
+          >
+            <LogOut className="w-5 h-5 flex-shrink-0" />
+            <span>Logout</span>
+          </button>
+        </div>
       </aside>
     </>
   );
