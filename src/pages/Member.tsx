@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Header from "@/components/Header";
 import BottomNav from "@/components/BottomNav";
 import { Link, useNavigate } from "react-router-dom";
@@ -51,13 +52,18 @@ const Member = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const handleRefreshBalance = async () => {
+    setIsRefreshing(true);
     await queryClient.invalidateQueries({ queryKey: ['user-profile'] });
-    toast({
-      title: "Refreshed",
-      description: "Balance has been updated",
-    });
+    setTimeout(() => {
+      setIsRefreshing(false);
+      toast({
+        title: "Refreshed",
+        description: "Balance has been updated",
+      });
+    }, 600);
   };
 
   const handleCopyUsername = () => {
@@ -174,9 +180,10 @@ const Member = () => {
               </div>
               <button
                 onClick={handleRefreshBalance}
-                className="p-2 text-muted-foreground hover:text-foreground transition-colors"
+                disabled={isRefreshing}
+                className="p-2 text-primary hover:text-primary/80 transition-colors disabled:opacity-50"
               >
-                <RefreshCw className="w-5 h-5" />
+                <RefreshCw className={`w-5 h-5 transition-transform duration-500 ${isRefreshing ? 'animate-spin' : ''}`} />
               </button>
             </div>
 
