@@ -183,7 +183,7 @@ const Member = () => {
                 disabled={isRefreshing}
                 className="p-2 text-primary hover:text-primary/80 transition-colors disabled:opacity-50"
               >
-                <RefreshCw className={`w-5 h-5 transition-transform duration-500 ${isRefreshing ? 'animate-spin' : ''}`} />
+                <RefreshCw className={`w-5 h-5 ${isRefreshing ? 'animate-spin' : ''}`} />
               </button>
             </div>
 
