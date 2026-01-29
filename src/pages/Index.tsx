@@ -13,7 +13,7 @@ const Index = () => {
   const [activeTab, setActiveTab] = useState("hot");
 
   return (
-    <div className="min-h-screen bg-background pb-24">
+    <div className="min-h-screen bg-background pb-24 overflow-x-hidden">
       <AppDownloadBanner />
       <Header />
       <AnnouncementBar />
