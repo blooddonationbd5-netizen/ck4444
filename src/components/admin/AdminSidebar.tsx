@@ -78,7 +78,7 @@ const menuItems: MenuItem[] = [
 ];
 
 const AdminSidebar = () => {
-  const [collapsed, setCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const [openMenus, setOpenMenus] = useState<string[]>(["Manage Transaction"]);
   const location = useLocation();
 
@@ -94,42 +94,40 @@ const AdminSidebar = () => {
 
   return (
     <>
-      {/* Mobile Toggle Button */}
+      {/* Mobile Toggle Button - Always Visible on Mobile */}
       <button
-        onClick={() => setCollapsed(!collapsed)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-card rounded-lg border border-border"
+        onClick={() => setMobileOpen(!mobileOpen)}
+        className="lg:hidden fixed top-4 left-4 z-[60] p-2 bg-card rounded-lg border border-border shadow-lg"
       >
-        {collapsed ? <Menu className="w-5 h-5" /> : <X className="w-5 h-5" />}
+        {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
       </button>
 
       {/* Overlay for mobile */}
-      {!collapsed && (
+      {mobileOpen && (
         <div
-          className="lg:hidden fixed inset-0 bg-background/80 backdrop-blur-sm z-40"
-          onClick={() => setCollapsed(true)}
+          className="lg:hidden fixed inset-0 bg-background/80 backdrop-blur-sm z-[45]"
+          onClick={() => setMobileOpen(false)}
         />
       )}
 
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed lg:static inset-y-0 left-0 z-50 flex flex-col bg-card border-r border-border transition-all duration-300",
-          collapsed ? "-translate-x-full lg:translate-x-0 lg:w-16" : "translate-x-0 w-64"
+          "fixed lg:static inset-y-0 left-0 z-[50] flex flex-col bg-card border-r border-border transition-all duration-300 w-64",
+          mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         )}
       >
         {/* Header */}
         <div className="p-4 border-b border-border flex items-center justify-between">
-          {!collapsed && (
-            <div className="flex items-center gap-2">
-              <span className="text-xl font-bold text-gradient-gold">CK44</span>
-              <span className="text-sm text-muted-foreground">Admin</span>
-            </div>
-          )}
+          <div className="flex items-center gap-2">
+            <span className="text-xl font-bold text-gradient-gold">CK44</span>
+            <span className="text-sm text-muted-foreground">Admin</span>
+          </div>
           <button
-            onClick={() => setCollapsed(!collapsed)}
-            className="hidden lg:block p-1.5 hover:bg-secondary rounded-lg transition-colors"
+            onClick={() => setMobileOpen(false)}
+            className="lg:hidden p-1.5 hover:bg-secondary rounded-lg transition-colors"
           >
-            <Menu className="w-5 h-5 text-muted-foreground" />
+            <X className="w-5 h-5 text-muted-foreground" />
           </button>
         </div>
 
@@ -148,24 +146,20 @@ const AdminSidebar = () => {
                     )}
                   >
                     <item.icon className="w-5 h-5 flex-shrink-0" />
-                    {!collapsed && (
-                      <>
-                        <span className="flex-1 text-left">{item.title}</span>
-                        {openMenus.includes(item.title) ? (
-                          <ChevronDown className="w-4 h-4" />
-                        ) : (
-                          <ChevronRight className="w-4 h-4" />
-                        )}
-                      </>
+                    <span className="flex-1 text-left">{item.title}</span>
+                    {openMenus.includes(item.title) ? (
+                      <ChevronDown className="w-4 h-4" />
+                    ) : (
+                      <ChevronRight className="w-4 h-4" />
                     )}
                   </button>
-                  {!collapsed && openMenus.includes(item.title) && (
+                  {openMenus.includes(item.title) && (
                     <div className="ml-4 mt-1 space-y-1 border-l border-border pl-3">
                       {item.children.map((child) => (
                         <NavLink
                           key={child.path}
                           to={child.path}
-                          onClick={() => setCollapsed(true)}
+                          onClick={() => setMobileOpen(false)}
                           className={cn(
                             "flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors",
                             isActive(child.path)
@@ -183,7 +177,7 @@ const AdminSidebar = () => {
               ) : (
                 <NavLink
                   to={item.path!}
-                  onClick={() => setCollapsed(true)}
+                  onClick={() => setMobileOpen(false)}
                   className={cn(
                     "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
                     isActive(item.path!)
@@ -192,7 +186,7 @@ const AdminSidebar = () => {
                   )}
                 >
                   <item.icon className="w-5 h-5 flex-shrink-0" />
-                  {!collapsed && <span>{item.title}</span>}
+                  <span>{item.title}</span>
                 </NavLink>
               )}
             </div>
