@@ -8,62 +8,87 @@ import {
   TrendingDown,
   Gamepad2,
   UserPlus,
+  Loader2,
 } from "lucide-react";
-
-const stats = [
-  {
-    title: "Total Players",
-    value: "12,456",
-    change: "+12.5%",
-    trend: "up",
-    icon: Users,
-  },
-  {
-    title: "Total Deposit",
-    value: "৳1,234,567",
-    change: "+8.2%",
-    trend: "up",
-    icon: ArrowDownToLine,
-  },
-  {
-    title: "Total Withdraw",
-    value: "৳987,654",
-    change: "+5.1%",
-    trend: "up",
-    icon: ArrowUpFromLine,
-  },
-  {
-    title: "Total Balance",
-    value: "৳2,456,789",
-    change: "+15.3%",
-    trend: "up",
-    icon: Wallet,
-  },
-  {
-    title: "Active Games",
-    value: "156",
-    change: "+3",
-    trend: "up",
-    icon: Gamepad2,
-  },
-  {
-    title: "New Users Today",
-    value: "89",
-    change: "-2.4%",
-    trend: "down",
-    icon: UserPlus,
-  },
-];
-
-const recentTransactions = [
-  { id: 1, user: "player123", type: "Deposit", amount: "৳5,000", status: "Completed", time: "2 min ago" },
-  { id: 2, user: "gamer456", type: "Withdraw", amount: "৳3,500", status: "Pending", time: "5 min ago" },
-  { id: 3, user: "user789", type: "Deposit", amount: "৳10,000", status: "Completed", time: "12 min ago" },
-  { id: 4, user: "player321", type: "Bonus", amount: "৳500", status: "Completed", time: "15 min ago" },
-  { id: 5, user: "newuser99", type: "Withdraw", amount: "৳2,000", status: "Processing", time: "20 min ago" },
-];
+import { useTransactions } from "@/hooks/useTransactions";
+import { useProfiles } from "@/hooks/useProfiles";
+import { format } from "date-fns";
 
 const Dashboard = () => {
+  const { data: transactions, isLoading: txLoading } = useTransactions();
+  const { data: profiles, isLoading: profilesLoading } = useProfiles();
+
+  const isLoading = txLoading || profilesLoading;
+
+  // Calculate stats
+  const totalPlayers = profiles?.length ?? 0;
+  const totalDeposit = transactions
+    ?.filter(t => t.type === 'deposit' && t.status === 'completed')
+    .reduce((sum, t) => sum + Number(t.amount), 0) ?? 0;
+  const totalWithdraw = transactions
+    ?.filter(t => t.type === 'withdraw' && t.status === 'completed')
+    .reduce((sum, t) => sum + Number(t.amount), 0) ?? 0;
+  const totalBalance = profiles?.reduce((sum, p) => sum + Number(p.balance), 0) ?? 0;
+
+  // Get recent transactions (last 5)
+  const recentTransactions = transactions?.slice(0, 5) ?? [];
+
+  const stats = [
+    {
+      title: "Total Players",
+      value: totalPlayers.toLocaleString(),
+      change: "+12.5%",
+      trend: "up",
+      icon: Users,
+    },
+    {
+      title: "Total Deposit",
+      value: `৳${totalDeposit.toLocaleString()}`,
+      change: "+8.2%",
+      trend: "up",
+      icon: ArrowDownToLine,
+    },
+    {
+      title: "Total Withdraw",
+      value: `৳${totalWithdraw.toLocaleString()}`,
+      change: "+5.1%",
+      trend: "up",
+      icon: ArrowUpFromLine,
+    },
+    {
+      title: "Total Balance",
+      value: `৳${totalBalance.toLocaleString()}`,
+      change: "+15.3%",
+      trend: "up",
+      icon: Wallet,
+    },
+    {
+      title: "Active Games",
+      value: "156",
+      change: "+3",
+      trend: "up",
+      icon: Gamepad2,
+    },
+    {
+      title: "New Users Today",
+      value: profiles?.filter(p => {
+        const today = new Date().toDateString();
+        return new Date(p.created_at).toDateString() === today;
+      }).length.toString() ?? "0",
+      change: "+2.4%",
+      trend: "up",
+      icon: UserPlus,
+    },
+  ];
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -83,13 +108,13 @@ const Dashboard = () => {
                   <p className="text-2xl font-bold text-foreground mt-1">{stat.value}</p>
                   <div className="flex items-center gap-1 mt-1">
                     {stat.trend === "up" ? (
-                      <TrendingUp className="w-4 h-4 text-success" />
+                      <TrendingUp className="w-4 h-4 text-green-500" />
                     ) : (
                       <TrendingDown className="w-4 h-4 text-destructive" />
                     )}
                     <span
                       className={
-                        stat.trend === "up" ? "text-success text-sm" : "text-destructive text-sm"
+                        stat.trend === "up" ? "text-green-500 text-sm" : "text-destructive text-sm"
                       }
                     >
                       {stat.change}
@@ -112,52 +137,62 @@ const Dashboard = () => {
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-border">
-                  <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">User</th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Type</th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Amount</th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Status</th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Time</th>
-                </tr>
-              </thead>
-              <tbody>
-                {recentTransactions.map((tx) => (
-                  <tr key={tx.id} className="border-b border-border/50 hover:bg-secondary/30">
-                    <td className="py-3 px-4 text-sm text-foreground">{tx.user}</td>
-                    <td className="py-3 px-4">
-                      <span
-                        className={`text-xs px-2 py-1 rounded-full ${
-                          tx.type === "Deposit"
-                            ? "bg-success/20 text-success"
-                            : tx.type === "Withdraw"
-                            ? "bg-warning/20 text-warning"
-                            : "bg-primary/20 text-primary"
-                        }`}
-                      >
-                        {tx.type}
-                      </span>
-                    </td>
-                    <td className="py-3 px-4 text-sm font-medium text-foreground">{tx.amount}</td>
-                    <td className="py-3 px-4">
-                      <span
-                        className={`text-xs px-2 py-1 rounded-full ${
-                          tx.status === "Completed"
-                            ? "bg-success/20 text-success"
-                            : tx.status === "Pending"
-                            ? "bg-warning/20 text-warning"
-                            : "bg-muted text-muted-foreground"
-                        }`}
-                      >
-                        {tx.status}
-                      </span>
-                    </td>
-                    <td className="py-3 px-4 text-sm text-muted-foreground">{tx.time}</td>
+            {recentTransactions.length === 0 ? (
+              <p className="text-muted-foreground text-center py-8">No transactions yet</p>
+            ) : (
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-border">
+                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">ID</th>
+                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Type</th>
+                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Amount</th>
+                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Status</th>
+                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Time</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {recentTransactions.map((tx) => (
+                    <tr key={tx.id} className="border-b border-border/50 hover:bg-secondary/30">
+                      <td className="py-3 px-4 text-sm text-foreground font-mono">
+                        {tx.id.slice(0, 8)}...
+                      </td>
+                      <td className="py-3 px-4">
+                        <span
+                          className={`text-xs px-2 py-1 rounded-full ${
+                            tx.type === "deposit"
+                              ? "bg-green-500/20 text-green-500"
+                              : tx.type === "withdraw"
+                              ? "bg-yellow-500/20 text-yellow-500"
+                              : "bg-primary/20 text-primary"
+                          }`}
+                        >
+                          {tx.type}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4 text-sm font-medium text-foreground">
+                        ৳{Number(tx.amount).toLocaleString()}
+                      </td>
+                      <td className="py-3 px-4">
+                        <span
+                          className={`text-xs px-2 py-1 rounded-full ${
+                            tx.status === "completed"
+                              ? "bg-green-500/20 text-green-500"
+                              : tx.status === "pending"
+                              ? "bg-yellow-500/20 text-yellow-500"
+                              : "bg-muted text-muted-foreground"
+                          }`}
+                        >
+                          {tx.status}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4 text-sm text-muted-foreground">
+                        {format(new Date(tx.created_at), 'dd MMM, HH:mm')}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
         </CardContent>
       </Card>
