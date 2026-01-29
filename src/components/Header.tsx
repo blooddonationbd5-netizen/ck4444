@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import { Menu, RefreshCw } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -5,7 +6,7 @@ import { useUserProfile } from "@/hooks/useUserProfile";
 import { useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 
-const Header = () => {
+const Header = forwardRef<HTMLElement>((_, ref) => {
   const { user } = useAuth();
   const { data: profile } = useUserProfile();
   const queryClient = useQueryClient();
@@ -20,7 +21,7 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-background px-4 py-3 flex items-center justify-between border-b border-border">
+    <header ref={ref} className="bg-background px-4 py-3 flex items-center justify-between border-b border-border">
       {/* Left - Menu & Logo */}
       <div className="flex items-center gap-3">
         <button className="p-1">
@@ -73,6 +74,8 @@ const Header = () => {
       )}
     </header>
   );
-};
+});
+
+Header.displayName = "Header";
 
 export default Header;
