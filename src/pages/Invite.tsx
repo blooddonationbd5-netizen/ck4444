@@ -2,24 +2,48 @@ import Header from "@/components/Header";
 import BottomNav from "@/components/BottomNav";
 import { Users, Copy, Share2, Gift, TrendingUp } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useUserProfile } from "@/hooks/useUserProfile";
 
 const Invite = () => {
   const { toast } = useToast();
-  const referralCode = "CK44USER123";
-  const referralLink = `https://ck44.com/ref/${referralCode}`;
+  const { data: profile } = useUserProfile();
+  
+  const referralCode = profile?.referral_code || "CK44USER";
+  const referralLink = `https://ck4444.lovable.app/register?ref=${referralCode}`;
 
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
     toast({
-      title: "কপি হয়েছে!",
-      description: "লিংক ক্লিপবোর্ডে কপি করা হয়েছে।",
+      title: "Copied!",
+      description: "Link copied to clipboard.",
     });
   };
 
+  const handleShare = (platform: string) => {
+    const message = `Join CK44.COM and get bonus! Use my referral code: ${referralCode}`;
+    let shareUrl = '';
+    
+    switch (platform) {
+      case 'whatsapp':
+        shareUrl = `https://wa.me/?text=${encodeURIComponent(message + '\n' + referralLink)}`;
+        break;
+      case 'facebook':
+        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(referralLink)}`;
+        break;
+      case 'telegram':
+        shareUrl = `https://t.me/share/url?url=${encodeURIComponent(referralLink)}&text=${encodeURIComponent(message)}`;
+        break;
+    }
+    
+    if (shareUrl) {
+      window.open(shareUrl, '_blank');
+    }
+  };
+
   const stats = [
-    { label: "মোট রেফারেল", value: "০", icon: Users },
-    { label: "মোট আয়", value: "৳০", icon: TrendingUp },
-    { label: "পেন্ডিং বোনাস", value: "৳০", icon: Gift },
+    { label: "Total Referrals", value: "0", icon: Users },
+    { label: "Total Earnings", value: "৳0", icon: TrendingUp },
+    { label: "Pending Bonus", value: "৳0", icon: Gift },
   ];
 
   return (
@@ -33,10 +57,10 @@ const Invite = () => {
             <Users className="w-8 h-8 text-primary-foreground" />
           </div>
           <h1 className="text-xl font-bold text-foreground mb-2">
-            বন্ধুদের আমন্ত্রণ করুন
+            Invite Friends
           </h1>
           <p className="text-muted-foreground text-sm">
-            প্রতিটি সফল রেফারেলের জন্য ৳১০০ বোনাস পান!
+            Get ৳100 bonus for every successful referral!
           </p>
         </div>
 
@@ -56,7 +80,7 @@ const Invite = () => {
 
         {/* Referral Code */}
         <div className="bg-card border border-border rounded-xl p-4 mb-4">
-          <p className="text-sm text-muted-foreground mb-2">আপনার রেফারেল কোড</p>
+          <p className="text-sm text-muted-foreground mb-2">Your Referral Code</p>
           <div className="flex items-center gap-2">
             <div className="flex-1 bg-secondary rounded-lg px-4 py-3 font-mono font-bold text-foreground">
               {referralCode}
@@ -72,7 +96,7 @@ const Invite = () => {
 
         {/* Referral Link */}
         <div className="bg-card border border-border rounded-xl p-4 mb-6">
-          <p className="text-sm text-muted-foreground mb-2">আপনার রেফারেল লিংক</p>
+          <p className="text-sm text-muted-foreground mb-2">Your Referral Link</p>
           <div className="flex items-center gap-2">
             <div className="flex-1 bg-secondary rounded-lg px-4 py-3 text-sm text-foreground truncate">
               {referralLink}
@@ -88,15 +112,24 @@ const Invite = () => {
 
         {/* Share Buttons */}
         <div className="grid grid-cols-3 gap-3">
-          <button className="flex flex-col items-center gap-2 bg-whatsapp p-4 rounded-xl hover:opacity-90 transition-opacity">
+          <button 
+            onClick={() => handleShare('whatsapp')}
+            className="flex flex-col items-center gap-2 bg-whatsapp p-4 rounded-xl hover:opacity-90 transition-opacity"
+          >
             <Share2 className="w-6 h-6 text-white" />
             <span className="text-xs text-white font-medium">WhatsApp</span>
           </button>
-          <button className="flex flex-col items-center gap-2 bg-facebook p-4 rounded-xl hover:opacity-90 transition-opacity">
+          <button 
+            onClick={() => handleShare('facebook')}
+            className="flex flex-col items-center gap-2 bg-facebook p-4 rounded-xl hover:opacity-90 transition-opacity"
+          >
             <Share2 className="w-6 h-6 text-white" />
             <span className="text-xs text-white font-medium">Facebook</span>
           </button>
-          <button className="flex flex-col items-center gap-2 bg-telegram p-4 rounded-xl hover:opacity-90 transition-opacity">
+          <button 
+            onClick={() => handleShare('telegram')}
+            className="flex flex-col items-center gap-2 bg-telegram p-4 rounded-xl hover:opacity-90 transition-opacity"
+          >
             <Share2 className="w-6 h-6 text-white" />
             <span className="text-xs text-white font-medium">Telegram</span>
           </button>
