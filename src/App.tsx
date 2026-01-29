@@ -5,6 +5,12 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import Promotion from "./pages/Promotion";
+import Invite from "./pages/Invite";
+import Reward from "./pages/Reward";
+import Member from "./pages/Member";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 // Admin imports
 import AdminLayout from "./components/admin/AdminLayout";
@@ -39,7 +45,14 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
+          {/* Public Routes */}
           <Route path="/" element={<Index />} />
+          <Route path="/promotion" element={<Promotion />} />
+          <Route path="/invite" element={<Invite />} />
+          <Route path="/reward" element={<Reward />} />
+          <Route path="/member" element={<Member />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
           
           {/* Admin Routes */}
           <Route path="/admin" element={<AdminLayout />}>
