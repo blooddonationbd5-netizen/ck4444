@@ -71,12 +71,12 @@ const Withdraw = () => {
 
       <div className="px-4 py-4 space-y-4">
         {/* Balance Card */}
-        <div className="bg-gradient-to-r from-primary/20 to-primary/10 border border-primary/30 rounded-xl p-4">
-          <div className="flex items-center gap-3">
-            <Wallet className="w-8 h-8 text-primary" />
-            <div>
-              <p className="text-xs text-muted-foreground">Available Balance</p>
-              <p className="text-2xl font-bold text-foreground">৳ {balance.toFixed(2)}</p>
+        <div className="bg-gradient-to-r from-primary/20 to-primary/10 border border-primary/30 rounded-xl p-3">
+          <div className="flex items-center gap-2">
+            <Wallet className="w-6 h-6 text-primary flex-shrink-0" />
+            <div className="min-w-0 flex-1">
+              <p className="text-xs text-muted-foreground whitespace-nowrap">Available Balance</p>
+              <p className="text-xl font-bold text-foreground whitespace-nowrap">৳ {balance.toFixed(2)}</p>
             </div>
           </div>
         </div>
