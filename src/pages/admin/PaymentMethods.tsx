@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Plus, Edit, Trash2, CreditCard, Loader2, Upload } from "lucide-react";
+import { Plus, Edit, Trash2, CreditCard, Loader2, Upload, Image } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import {
   Dialog,
@@ -29,6 +29,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { usePaymentMethods, useCreatePaymentMethod, useUpdatePaymentMethod, useDeletePaymentMethod, PaymentMethod } from "@/hooks/usePaymentMethods";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 const paymentTypes = ["Mobile Banking", "Bank Transfer", "Crypto", "E-Wallet", "Card"];
 
@@ -37,11 +39,14 @@ const PaymentMethodsPage = () => {
   const createMethod = useCreatePaymentMethod();
   const updateMethod = useUpdatePaymentMethod();
   const deleteMethod = useDeletePaymentMethod();
+  const { toast } = useToast();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [editingMethod, setEditingMethod] = useState<PaymentMethod | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
   
   const [formData, setFormData] = useState({
     name: "",
@@ -50,6 +55,7 @@ const PaymentMethodsPage = () => {
     min_amount: 100,
     max_amount: 50000,
     is_active: true,
+    logo_url: "",
   });
 
   const handleOpenDialog = (method?: PaymentMethod) => {
@@ -62,6 +68,7 @@ const PaymentMethodsPage = () => {
         min_amount: method.min_amount || 100,
         max_amount: method.max_amount || 50000,
         is_active: method.is_active,
+        logo_url: method.logo_url || "",
       });
     } else {
       setEditingMethod(null);
@@ -72,18 +79,60 @@ const PaymentMethodsPage = () => {
         min_amount: 100,
         max_amount: 50000,
         is_active: true,
+        logo_url: "",
       });
     }
     setIsDialogOpen(true);
   };
 
+  const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('payment-logos')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('payment-logos')
+        .getPublicUrl(filePath);
+
+      setFormData({ ...formData, logo_url: publicUrl });
+      toast({
+        title: 'Success!',
+        description: 'Logo uploaded successfully.',
+      });
+    } catch (error: any) {
+      toast({
+        title: 'Error!',
+        description: error.message || 'Failed to upload logo.',
+        variant: 'destructive',
+      });
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const handleSubmit = async () => {
     if (!formData.name || !formData.type) return;
 
+    const payload = {
+      ...formData,
+      logo_url: formData.logo_url || null,
+    };
+
     if (editingMethod) {
-      await updateMethod.mutateAsync({ id: editingMethod.id, ...formData });
+      await updateMethod.mutateAsync({ id: editingMethod.id, ...payload });
     } else {
-      await createMethod.mutateAsync(formData);
+      await createMethod.mutateAsync(payload);
     }
     setIsDialogOpen(false);
     setFormData({
@@ -93,6 +142,7 @@ const PaymentMethodsPage = () => {
       min_amount: 100,
       max_amount: 50000,
       is_active: true,
+      logo_url: "",
     });
     setEditingMethod(null);
   };
@@ -143,8 +193,12 @@ const PaymentMethodsPage = () => {
               <CardContent className="p-4">
                 <div className="flex items-center justify-between gap-4">
                   <div className="flex items-center gap-3">
-                    <div className="p-3 bg-primary/10 rounded-xl">
-                      <CreditCard className="w-6 h-6 text-primary" />
+                    <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center overflow-hidden">
+                      {method.logo_url ? (
+                        <img src={method.logo_url} alt={method.name} className="w-full h-full object-cover" />
+                      ) : (
+                        <CreditCard className="w-6 h-6 text-primary" />
+                      )}
                     </div>
                     <div>
                       <h3 className="font-medium text-foreground">{method.name}</h3>
@@ -199,11 +253,49 @@ const PaymentMethodsPage = () => {
 
       {/* Add/Edit Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent>
+        <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>{editingMethod ? "Edit Payment Method" : "Add Payment Method"}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
+            {/* Logo Upload */}
+            <div className="space-y-2">
+              <Label>Logo</Label>
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 border-2 border-dashed border-border rounded-xl flex items-center justify-center overflow-hidden bg-secondary">
+                  {formData.logo_url ? (
+                    <img src={formData.logo_url} alt="Logo" className="w-full h-full object-cover" />
+                  ) : (
+                    <Image className="w-6 h-6 text-muted-foreground" />
+                  )}
+                </div>
+                <div className="flex-1">
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleLogoUpload}
+                    accept="image/*"
+                    className="hidden"
+                  />
+                  <Button 
+                    type="button" 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={uploading}
+                  >
+                    {uploading ? (
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    ) : (
+                      <Upload className="w-4 h-4 mr-2" />
+                    )}
+                    Upload Logo
+                  </Button>
+                  <p className="text-xs text-muted-foreground mt-1">PNG, JPG up to 2MB</p>
+                </div>
+              </div>
+            </div>
+
             <div className="space-y-2">
               <Label>Name</Label>
               <Input

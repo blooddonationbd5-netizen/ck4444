@@ -83,6 +83,7 @@ export type Database = {
           created_at: string | null
           id: string
           is_active: boolean | null
+          logo_url: string | null
           max_amount: number | null
           min_amount: number | null
           name: string
@@ -94,6 +95,7 @@ export type Database = {
           created_at?: string | null
           id?: string
           is_active?: boolean | null
+          logo_url?: string | null
           max_amount?: number | null
           min_amount?: number | null
           name: string
@@ -105,6 +107,7 @@ export type Database = {
           created_at?: string | null
           id?: string
           is_active?: boolean | null
+          logo_url?: string | null
           max_amount?: number | null
           min_amount?: number | null
           name?: string

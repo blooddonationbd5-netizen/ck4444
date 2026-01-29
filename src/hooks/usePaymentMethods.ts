@@ -82,6 +82,7 @@ export const useUpdatePaymentMethod = () => {
       min_amount?: number;
       max_amount?: number;
       is_active?: boolean;
+      logo_url?: string | null;
     }) => {
       const { error } = await supabase
         .from('payment_methods')
