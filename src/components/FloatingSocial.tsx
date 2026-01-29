@@ -1,8 +1,9 @@
+import { forwardRef } from "react";
 import { ArrowUp, Send, Headphones } from "lucide-react";
 
-const FloatingSocial = () => {
+const FloatingSocial = forwardRef<HTMLDivElement>((props, ref) => {
   return (
-    <div className="fixed right-3 bottom-24 z-40 flex flex-col gap-2">
+    <div ref={ref} className="fixed right-3 bottom-24 z-40 flex flex-col gap-2">
       {/* WhatsApp */}
       <button className="w-12 h-12 rounded-full bg-whatsapp shadow-lg flex items-center justify-center hover:scale-110 transition-transform">
         <svg viewBox="0 0 24 24" className="w-6 h-6 fill-foreground">
@@ -33,6 +34,8 @@ const FloatingSocial = () => {
       </button>
     </div>
   );
-};
+});
+
+FloatingSocial.displayName = "FloatingSocial";
 
 export default FloatingSocial;

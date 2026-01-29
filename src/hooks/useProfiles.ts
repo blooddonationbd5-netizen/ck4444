@@ -47,14 +47,14 @@ export const useUpdateProfileStatus = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['profiles'] });
       toast({
-        title: 'সফল!',
-        description: 'স্ট্যাটাস আপডেট হয়েছে।',
+        title: 'Success!',
+        description: 'Status updated successfully.',
       });
     },
     onError: () => {
       toast({
-        title: 'ত্রুটি!',
-        description: 'স্ট্যাটাস আপডেট করতে ব্যর্থ হয়েছে।',
+        title: 'Error!',
+        description: 'Failed to update status.',
         variant: 'destructive',
       });
     },

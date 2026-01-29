@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Eye, EyeOff, Phone, Lock, Loader2 } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -26,15 +26,15 @@ const Login = () => {
       if (error) throw error;
 
       toast({
-        title: "সফল!",
-        description: "সফলভাবে লগইন হয়েছে।",
+        title: "Success!",
+        description: "You have been logged in successfully.",
       });
       
       navigate("/");
     } catch (error: any) {
       toast({
-        title: "ত্রুটি!",
-        description: error.message || "লগইন করতে ব্যর্থ হয়েছে।",
+        title: "Error!",
+        description: error.message || "Failed to login.",
         variant: "destructive",
       });
     } finally {
@@ -50,7 +50,7 @@ const Login = () => {
           <span className="text-3xl font-bold text-gradient-gold">CK44</span>
           <span className="text-3xl font-bold text-foreground">.COM</span>
         </div>
-        <p className="text-muted-foreground">আপনার অ্যাকাউন্টে লগইন করুন</p>
+        <p className="text-muted-foreground">Login to your account</p>
       </div>
 
       <div className="px-4 py-6">
@@ -58,15 +58,15 @@ const Login = () => {
           {/* Email Input */}
           <div className="mb-4">
             <label className="text-sm text-muted-foreground mb-2 block">
-              ইমেইল
+              Email
             </label>
             <div className="flex items-center gap-2 bg-secondary rounded-lg px-4 py-3">
-              <Phone className="w-5 h-5 text-muted-foreground" />
+              <Mail className="w-5 h-5 text-muted-foreground" />
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="আপনার ইমেইল লিখুন"
+                placeholder="Enter your email"
                 className="flex-1 bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground"
                 required
               />
@@ -76,7 +76,7 @@ const Login = () => {
           {/* Password Input */}
           <div className="mb-6">
             <label className="text-sm text-muted-foreground mb-2 block">
-              পাসওয়ার্ড
+              Password
             </label>
             <div className="flex items-center gap-2 bg-secondary rounded-lg px-4 py-3">
               <Lock className="w-5 h-5 text-muted-foreground" />
@@ -84,7 +84,7 @@ const Login = () => {
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="আপনার পাসওয়ার্ড লিখুন"
+                placeholder="Enter your password"
                 className="flex-1 bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground"
                 required
               />
@@ -105,7 +105,7 @@ const Login = () => {
           {/* Forgot Password */}
           <div className="text-right mb-6">
             <Link to="/forgot-password" className="text-primary text-sm">
-              পাসওয়ার্ড ভুলে গেছেন?
+              Forgot Password?
             </Link>
           </div>
 
@@ -116,14 +116,14 @@ const Login = () => {
             className="w-full bg-gradient-gold text-primary-foreground py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2"
           >
             {loading && <Loader2 className="w-4 h-4 animate-spin" />}
-            লগইন করুন
+            Login
           </button>
 
           {/* Register Link */}
           <p className="text-center mt-6 text-muted-foreground">
-            অ্যাকাউন্ট নেই?{" "}
+            Don't have an account?{" "}
             <Link to="/register" className="text-primary font-semibold">
-              রেজিস্টার করুন
+              Register
             </Link>
           </p>
         </form>
