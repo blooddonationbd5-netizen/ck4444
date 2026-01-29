@@ -1,4 +1,5 @@
-import { Menu, RefreshCw } from "lucide-react";
+import { Menu } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
@@ -14,21 +15,20 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Right - Avatar & Balance */}
-      <div className="flex items-center gap-3">
-        {/* Avatar */}
-        <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-primary">
-          <div className="w-full h-full bg-gradient-gold flex items-center justify-center">
-            <span className="text-primary-foreground font-bold">U</span>
-          </div>
-        </div>
-
-        {/* Balance */}
-        <div className="flex items-center gap-1 bg-secondary rounded-full px-3 py-1.5">
-          <span className="text-primary font-bold">৳</span>
-          <span className="text-foreground font-semibold text-sm">0.68</span>
-          <RefreshCw className="w-4 h-4 text-muted-foreground ml-1" />
-        </div>
+      {/* Right - Login & Register */}
+      <div className="flex items-center gap-2">
+        <Link 
+          to="/login"
+          className="bg-primary text-primary-foreground px-5 py-1.5 rounded-full text-sm font-semibold hover:opacity-90 transition-opacity"
+        >
+          Login
+        </Link>
+        <Link 
+          to="/register"
+          className="bg-gradient-gold text-primary-foreground px-5 py-1.5 rounded-full text-sm font-semibold hover:opacity-90 transition-opacity"
+        >
+          Register
+        </Link>
       </div>
     </header>
   );
