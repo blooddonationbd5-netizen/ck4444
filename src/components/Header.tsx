@@ -1,4 +1,4 @@
-import { forwardRef } from "react";
+import { forwardRef, useState } from "react";
 import { Menu, RefreshCw } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -11,13 +11,18 @@ const Header = forwardRef<HTMLElement>((_, ref) => {
   const { data: profile } = useUserProfile();
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const handleRefreshBalance = async () => {
+    setIsRefreshing(true);
     await queryClient.invalidateQueries({ queryKey: ['user-profile'] });
-    toast({
-      title: "Refreshed",
-      description: "Balance has been updated",
-    });
+    setTimeout(() => {
+      setIsRefreshing(false);
+      toast({
+        title: "Refreshed",
+        description: "Balance has been updated",
+      });
+    }, 600);
   };
 
   return (
@@ -43,9 +48,10 @@ const Header = forwardRef<HTMLElement>((_, ref) => {
             </span>
             <button 
               onClick={handleRefreshBalance}
-              className="text-muted-foreground hover:text-foreground transition-colors"
+              disabled={isRefreshing}
+              className="text-muted-foreground hover:text-foreground transition-colors disabled:opacity-50"
             >
-              <RefreshCw className="w-4 h-4" />
+              <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
             </button>
           </div>
           {/* Deposit Button */}
