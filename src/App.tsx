@@ -13,6 +13,24 @@ import Member from "./pages/Member";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 
+// User Dashboard Pages
+import BettingRecord from "./pages/user/BettingRecord";
+import ProfitLoss from "./pages/user/ProfitLoss";
+import DepositRecord from "./pages/user/DepositRecord";
+import WithdrawRecord from "./pages/user/WithdrawRecord";
+import AccountRecord from "./pages/user/AccountRecord";
+import MyAccount from "./pages/user/MyAccount";
+import Security from "./pages/user/Security";
+import Mission from "./pages/user/Mission";
+import Rebate from "./pages/user/Rebate";
+import Messages from "./pages/user/Messages";
+import Suggestion from "./pages/user/Suggestion";
+import DownloadApp from "./pages/user/Download";
+import Support from "./pages/user/Support";
+import UserDeposit from "./pages/user/Deposit";
+import UserWithdraw from "./pages/user/Withdraw";
+import MyCards from "./pages/user/MyCards";
+
 // Admin imports
 import AdminLayout from "./components/admin/AdminLayout";
 import Dashboard from "./pages/admin/Dashboard";
@@ -55,6 +73,24 @@ const App = () => (
           <Route path="/member" element={<Member />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          
+          {/* User Dashboard Routes */}
+          <Route path="/betting-record" element={<BettingRecord />} />
+          <Route path="/profit-loss" element={<ProfitLoss />} />
+          <Route path="/deposit-record" element={<DepositRecord />} />
+          <Route path="/withdraw-record" element={<WithdrawRecord />} />
+          <Route path="/account-record" element={<AccountRecord />} />
+          <Route path="/my-account" element={<MyAccount />} />
+          <Route path="/security" element={<Security />} />
+          <Route path="/mission" element={<Mission />} />
+          <Route path="/rebate" element={<Rebate />} />
+          <Route path="/messages" element={<Messages />} />
+          <Route path="/suggestion" element={<Suggestion />} />
+          <Route path="/download" element={<DownloadApp />} />
+          <Route path="/support" element={<Support />} />
+          <Route path="/deposit" element={<UserDeposit />} />
+          <Route path="/withdraw" element={<UserWithdraw />} />
+          <Route path="/my-cards" element={<MyCards />} />
           
           {/* Admin Routes */}
           <Route path="/admin" element={<AdminLayout />}>
