@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import { Home, Gift, Users, Trophy, User } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 
@@ -9,11 +10,11 @@ const navItems = [
   { icon: User, label: "Member", path: "/member" },
 ];
 
-const BottomNav = () => {
+const BottomNav = forwardRef<HTMLElement>((_, ref) => {
   const location = useLocation();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-card border-t border-border safe-bottom">
+    <nav ref={ref} className="fixed bottom-0 left-0 right-0 z-50 bg-card border-t border-border safe-bottom">
       <div className="flex items-center justify-around py-2">
         {navItems.map((item, index) => {
           const isActive = location.pathname === item.path;
@@ -51,6 +52,8 @@ const BottomNav = () => {
       </div>
     </nav>
   );
-};
+});
+
+BottomNav.displayName = "BottomNav";
 
 export default BottomNav;
