@@ -4,10 +4,10 @@ import { Loader2 } from "lucide-react";
 import AdminSidebar from "./AdminSidebar";
 
 const AdminLayout = () => {
-  const { user, loading, isAdmin } = useAuth();
+  const { user, loading, isAdmin, adminCheckComplete } = useAuth();
 
-  // Show loading while checking auth
-  if (loading) {
+  // Show loading while checking auth or admin role
+  if (loading || (user && !adminCheckComplete)) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
@@ -20,8 +20,8 @@ const AdminLayout = () => {
     return <Navigate to="/admin-login" replace />;
   }
 
-  // Redirect to home if not admin
-  if (!isAdmin) {
+  // Redirect to home if not admin (only after admin check is complete)
+  if (adminCheckComplete && !isAdmin) {
     return <Navigate to="/" replace />;
   }
 
