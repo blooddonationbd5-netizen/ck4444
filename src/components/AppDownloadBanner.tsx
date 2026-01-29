@@ -1,6 +1,11 @@
 import { X, Star, Download } from "lucide-react";
+import { useState } from "react";
 
 const AppDownloadBanner = () => {
+  const [isVisible, setIsVisible] = useState(true);
+
+  if (!isVisible) return null;
+
   return (
     <div className="bg-gradient-teal px-3 py-2 flex items-center justify-between">
       {/* Logo & Info */}
@@ -24,7 +29,10 @@ const AppDownloadBanner = () => {
           <Download className="w-4 h-4" />
           Download
         </button>
-        <button className="w-8 h-8 rounded-full bg-secondary/50 flex items-center justify-center">
+        <button 
+          onClick={() => setIsVisible(false)}
+          className="w-8 h-8 rounded-full bg-secondary/50 flex items-center justify-center hover:bg-secondary/70 transition-colors"
+        >
           <X className="w-4 h-4 text-foreground" />
         </button>
       </div>
