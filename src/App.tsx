@@ -12,6 +12,7 @@ import Reward from "./pages/Reward";
 import Member from "./pages/Member";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import AdminLogin from "./pages/AdminLogin";
 
 // User Dashboard Pages
 import BettingRecord from "./pages/user/BettingRecord";
@@ -73,6 +74,7 @@ const App = () => (
           <Route path="/member" element={<Member />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/admin-login" element={<AdminLogin />} />
           
           {/* User Dashboard Routes */}
           <Route path="/betting-record" element={<BettingRecord />} />
