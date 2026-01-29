@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Eye, EyeOff, Phone, Lock, User, Users, Loader2 } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, User, Users, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -22,8 +22,8 @@ const Register = () => {
     
     if (password !== confirmPassword) {
       toast({
-        title: "ত্রুটি!",
-        description: "পাসওয়ার্ড মিলছে না।",
+        title: "Error!",
+        description: "Passwords do not match.",
         variant: "destructive",
       });
       return;
@@ -31,8 +31,8 @@ const Register = () => {
 
     if (password.length < 6) {
       toast({
-        title: "ত্রুটি!",
-        description: "পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে।",
+        title: "Error!",
+        description: "Password must be at least 6 characters.",
         variant: "destructive",
       });
       return;
@@ -56,15 +56,15 @@ const Register = () => {
       if (error) throw error;
 
       toast({
-        title: "সফল!",
-        description: "রেজিস্ট্রেশন সম্পন্ন হয়েছে। লগইন করুন।",
+        title: "Success!",
+        description: "Registration complete. Please login.",
       });
       
       navigate("/login");
     } catch (error: any) {
       toast({
-        title: "ত্রুটি!",
-        description: error.message || "রেজিস্ট্রেশন করতে ব্যর্থ হয়েছে।",
+        title: "Error!",
+        description: error.message || "Failed to register.",
         variant: "destructive",
       });
     } finally {
@@ -80,7 +80,7 @@ const Register = () => {
           <span className="text-3xl font-bold text-gradient-gold">CK44</span>
           <span className="text-3xl font-bold text-foreground">.COM</span>
         </div>
-        <p className="text-muted-foreground">নতুন অ্যাকাউন্ট তৈরি করুন</p>
+        <p className="text-muted-foreground">Create a new account</p>
       </div>
 
       <div className="px-4 py-6">
@@ -88,7 +88,7 @@ const Register = () => {
           {/* Name Input */}
           <div className="mb-4">
             <label className="text-sm text-muted-foreground mb-2 block">
-              পুরো নাম
+              Full Name
             </label>
             <div className="flex items-center gap-2 bg-secondary rounded-lg px-4 py-3">
               <User className="w-5 h-5 text-muted-foreground" />
@@ -96,7 +96,7 @@ const Register = () => {
                 type="text"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                placeholder="আপনার পুরো নাম লিখুন"
+                placeholder="Enter your full name"
                 className="flex-1 bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground"
                 required
               />
@@ -106,15 +106,15 @@ const Register = () => {
           {/* Email Input */}
           <div className="mb-4">
             <label className="text-sm text-muted-foreground mb-2 block">
-              ইমেইল
+              Email
             </label>
             <div className="flex items-center gap-2 bg-secondary rounded-lg px-4 py-3">
-              <Phone className="w-5 h-5 text-muted-foreground" />
+              <Mail className="w-5 h-5 text-muted-foreground" />
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="আপনার ইমেইল লিখুন"
+                placeholder="Enter your email"
                 className="flex-1 bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground"
                 required
               />
@@ -124,7 +124,7 @@ const Register = () => {
           {/* Password Input */}
           <div className="mb-4">
             <label className="text-sm text-muted-foreground mb-2 block">
-              পাসওয়ার্ড
+              Password
             </label>
             <div className="flex items-center gap-2 bg-secondary rounded-lg px-4 py-3">
               <Lock className="w-5 h-5 text-muted-foreground" />
@@ -132,7 +132,7 @@ const Register = () => {
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="পাসওয়ার্ড তৈরি করুন"
+                placeholder="Create a password"
                 className="flex-1 bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground"
                 required
               />
@@ -153,7 +153,7 @@ const Register = () => {
           {/* Confirm Password Input */}
           <div className="mb-4">
             <label className="text-sm text-muted-foreground mb-2 block">
-              পাসওয়ার্ড নিশ্চিত করুন
+              Confirm Password
             </label>
             <div className="flex items-center gap-2 bg-secondary rounded-lg px-4 py-3">
               <Lock className="w-5 h-5 text-muted-foreground" />
@@ -161,7 +161,7 @@ const Register = () => {
                 type={showConfirmPassword ? "text" : "password"}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="পাসওয়ার্ড আবার লিখুন"
+                placeholder="Confirm your password"
                 className="flex-1 bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground"
                 required
               />
@@ -182,7 +182,7 @@ const Register = () => {
           {/* Referral Code Input */}
           <div className="mb-6">
             <label className="text-sm text-muted-foreground mb-2 block">
-              রেফারেল কোড (ঐচ্ছিক)
+              Referral Code (Optional)
             </label>
             <div className="flex items-center gap-2 bg-secondary rounded-lg px-4 py-3">
               <Users className="w-5 h-5 text-muted-foreground" />
@@ -190,7 +190,7 @@ const Register = () => {
                 type="text"
                 value={referralCode}
                 onChange={(e) => setReferralCode(e.target.value)}
-                placeholder="রেফারেল কোড থাকলে লিখুন"
+                placeholder="Enter referral code if you have one"
                 className="flex-1 bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground"
               />
             </div>
@@ -203,14 +203,14 @@ const Register = () => {
             className="w-full bg-gradient-gold text-primary-foreground py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2"
           >
             {loading && <Loader2 className="w-4 h-4 animate-spin" />}
-            রেজিস্টার করুন
+            Register
           </button>
 
           {/* Login Link */}
           <p className="text-center mt-6 text-muted-foreground">
-            ইতিমধ্যে অ্যাকাউন্ট আছে?{" "}
+            Already have an account?{" "}
             <Link to="/login" className="text-primary font-semibold">
-              লগইন করুন
+              Login
             </Link>
           </p>
         </form>

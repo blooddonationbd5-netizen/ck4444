@@ -14,8 +14,8 @@ const Header = () => {
   const handleRefreshBalance = async () => {
     await queryClient.invalidateQueries({ queryKey: ['user-profile'] });
     toast({
-      title: "রিফ্রেশ হয়েছে",
-      description: "ব্যালেন্স আপডেট করা হয়েছে",
+      title: "Refreshed",
+      description: "Balance has been updated",
     });
   };
 
@@ -52,7 +52,7 @@ const Header = () => {
             to="/deposit"
             className="bg-gradient-gold text-primary-foreground px-4 py-1.5 rounded-full text-sm font-semibold hover:opacity-90 transition-opacity"
           >
-            ডিপোজিট
+            Deposit
           </Link>
         </div>
       ) : (

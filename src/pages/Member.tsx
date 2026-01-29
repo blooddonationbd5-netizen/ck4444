@@ -21,7 +21,6 @@ import {
   RefreshCw,
   Copy,
   ChevronRight,
-  CreditCard,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserProfile } from "@/hooks/useUserProfile";
@@ -29,26 +28,26 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 
 const memberMenuItems = [
-  { title: "রিওয়ার্ড সেন্টার", icon: Trophy, path: "/reward", badge: 12 },
-  { title: "বেটিং রেকর্ড", icon: TrendingUp, path: "/betting-record" },
-  { title: "প্রফিট এন্ড লস", icon: FileText, path: "/profit-loss" },
-  { title: "ডিপোজিট রেকর্ড", icon: ArrowDownToLine, path: "/deposit-record" },
-  { title: "উইথড্র রেকর্ড", icon: ArrowUpFromLine, path: "/withdraw-record" },
-  { title: "অ্যাকাউন্ট রেকর্ড", icon: FileText, path: "/account-record" },
-  { title: "মাই অ্যাকাউন্ট", icon: User, path: "/my-account" },
-  { title: "সিকিউরিটি সেন্টার", icon: Shield, path: "/security" },
-  { title: "ইনভাইট ফ্রেন্ডস", icon: Users, path: "/invite" },
-  { title: "মিশন", icon: Gift, path: "/mission", badge: 1 },
-  { title: "রিবেট", icon: Coins, path: "/rebate" },
-  { title: "ইন্টার্নাল মেসেজ", icon: MessageCircle, path: "/messages", badge: 6 },
-  { title: "সাজেশন", icon: MessageSquare, path: "/suggestion" },
-  { title: "ডাউনলোড অ্যাপ", icon: Download, path: "/download" },
-  { title: "কাস্টমার সার্ভিস", icon: Headphones, path: "/support" },
+  { title: "Reward Center", icon: Trophy, path: "/reward", badge: 12 },
+  { title: "Betting Record", icon: TrendingUp, path: "/betting-record" },
+  { title: "Profit And Loss", icon: FileText, path: "/profit-loss" },
+  { title: "Deposit Record", icon: ArrowDownToLine, path: "/deposit-record" },
+  { title: "Withdrawal Record", icon: ArrowUpFromLine, path: "/withdraw-record" },
+  { title: "Account Record", icon: FileText, path: "/account-record" },
+  { title: "My Account", icon: User, path: "/my-account" },
+  { title: "Security Center", icon: Shield, path: "/security" },
+  { title: "Invite Friends", icon: Users, path: "/invite" },
+  { title: "Mission", icon: Gift, path: "/mission", badge: 1 },
+  { title: "Rebate", icon: Coins, path: "/rebate" },
+  { title: "Internal Message", icon: MessageCircle, path: "/messages", badge: 6 },
+  { title: "Suggestion", icon: MessageSquare, path: "/suggestion" },
+  { title: "Download APP", icon: Download, path: "/download" },
+  { title: "Customer Service", icon: Headphones, path: "/support" },
 ];
 
 const Member = () => {
   const { user, signOut } = useAuth();
-  const { data: profile, isLoading, refetch } = useUserProfile();
+  const { data: profile, isLoading } = useUserProfile();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -56,8 +55,8 @@ const Member = () => {
   const handleRefreshBalance = async () => {
     await queryClient.invalidateQueries({ queryKey: ['user-profile'] });
     toast({
-      title: "রিফ্রেশ হয়েছে",
-      description: "ব্যালেন্স আপডেট করা হয়েছে",
+      title: "Refreshed",
+      description: "Balance has been updated",
     });
   };
 
@@ -65,8 +64,8 @@ const Member = () => {
     if (profile?.username) {
       navigator.clipboard.writeText(profile.username);
       toast({
-        title: "কপি হয়েছে!",
-        description: "ইউজারনেম কপি করা হয়েছে",
+        title: "Copied!",
+        description: "Username copied to clipboard",
       });
     }
   };
@@ -84,22 +83,22 @@ const Member = () => {
         <div className="px-4 py-8 text-center">
           <div className="bg-card border border-border rounded-xl p-8">
             <User className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
-            <h2 className="text-xl font-bold text-foreground mb-2">লগইন করুন</h2>
+            <h2 className="text-xl font-bold text-foreground mb-2">Please Login</h2>
             <p className="text-muted-foreground mb-6">
-              মেম্বার সেন্টার অ্যাক্সেস করতে লগইন করুন
+              Login to access Member Center
             </p>
             <div className="flex gap-3 justify-center">
               <Link
                 to="/login"
                 className="bg-primary text-primary-foreground px-6 py-2 rounded-lg font-medium"
               >
-                লগইন
+                Login
               </Link>
               <Link
                 to="/register"
                 className="bg-gradient-gold text-primary-foreground px-6 py-2 rounded-lg font-medium"
               >
-                রেজিস্টার
+                Register
               </Link>
             </div>
           </div>
@@ -243,7 +242,7 @@ const Member = () => {
               <LogOut className="w-6 h-6 text-primary" />
             </div>
             <span className="text-xs text-center text-foreground leading-tight">
-              লগআউট
+              Logout
             </span>
           </button>
         </div>
