@@ -14,6 +14,57 @@ export type Database = {
   }
   public: {
     Tables: {
+      bets: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          match_id: string
+          odds: number
+          potential_win: number
+          result: string | null
+          selection: string
+          sport: string
+          status: string
+          team1: string
+          team2: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          id?: string
+          match_id: string
+          odds: number
+          potential_win: number
+          result?: string | null
+          selection: string
+          sport: string
+          status?: string
+          team1: string
+          team2: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          match_id?: string
+          odds?: number
+          potential_win?: number
+          result?: string | null
+          selection?: string
+          sport?: string
+          status?: string
+          team1?: string
+          team2?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       bonuses: {
         Row: {
           amount: string
