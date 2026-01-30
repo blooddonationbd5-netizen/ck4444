@@ -31,6 +31,7 @@ import Support from "./pages/user/Support";
 import UserDeposit from "./pages/user/Deposit";
 import UserWithdraw from "./pages/user/Withdraw";
 import MyCards from "./pages/user/MyCards";
+import MyBets from "./pages/user/MyBets";
 import Sports from "./pages/Sports";
 
 // Admin imports
@@ -95,6 +96,7 @@ const App = () => (
           <Route path="/deposit" element={<UserDeposit />} />
           <Route path="/withdraw" element={<UserWithdraw />} />
           <Route path="/my-cards" element={<MyCards />} />
+          <Route path="/my-bets" element={<MyBets />} />
           <Route path="/sports" element={<Sports />} />
           
           {/* Admin Routes */}
