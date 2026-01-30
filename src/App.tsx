@@ -31,6 +31,7 @@ import Support from "./pages/user/Support";
 import UserDeposit from "./pages/user/Deposit";
 import UserWithdraw from "./pages/user/Withdraw";
 import MyCards from "./pages/user/MyCards";
+import Sports from "./pages/Sports";
 
 // Admin imports
 import AdminLayout from "./components/admin/AdminLayout";
@@ -93,6 +94,7 @@ const App = () => (
           <Route path="/deposit" element={<UserDeposit />} />
           <Route path="/withdraw" element={<UserWithdraw />} />
           <Route path="/my-cards" element={<MyCards />} />
+          <Route path="/sports" element={<Sports />} />
           
           {/* Admin Routes */}
           <Route path="/admin" element={<AdminLayout />}>
