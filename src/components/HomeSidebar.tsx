@@ -19,6 +19,7 @@ import {
   MessageCircle,
   X,
   LogOut,
+  Ticket,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
@@ -31,7 +32,7 @@ interface HomeSidebarProps {
 const menuItems = [
   { title: "Hot Games", icon: Flame, path: "/", color: "text-orange-500" },
   { title: "Invite friends", icon: Users, path: "/invite", color: "text-blue-400" },
-  { title: "Favorites", icon: Heart, path: "/favorites", color: "text-pink-500" },
+  { title: "My Bets", icon: Ticket, path: "/my-bets", color: "text-amber-500" },
   { title: "Promotion", icon: Gift, path: "/promotion", color: "text-yellow-500" },
   { title: "Slots", icon: Dices, path: "/slots", color: "text-purple-400" },
   { title: "Reward Center", icon: Star, path: "/reward", color: "text-yellow-400" },
