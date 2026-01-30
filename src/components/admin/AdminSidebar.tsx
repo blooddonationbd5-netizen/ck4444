@@ -4,6 +4,7 @@ import {
   LayoutDashboard,
   Receipt,
   FileText,
+  Ticket,
   User,
   Users,
   Settings,
@@ -39,6 +40,7 @@ interface MenuItem {
 
 const menuItems: MenuItem[] = [
   { title: "Dashboard", icon: LayoutDashboard, path: "/admin" },
+  { title: "Bets", icon: Ticket, path: "/admin/bets" },
   {
     title: "Manage Transaction",
     icon: Receipt,

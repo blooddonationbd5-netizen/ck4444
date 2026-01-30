@@ -56,6 +56,7 @@ import LogoIcon from "./pages/admin/LogoIcon";
 import Promotions from "./pages/admin/Promotions";
 import Settings from "./pages/admin/Settings";
 import GameAPI from "./pages/admin/GameAPI";
+import Bets from "./pages/admin/Bets";
 
 const queryClient = new QueryClient();
 
@@ -99,6 +100,7 @@ const App = () => (
           {/* Admin Routes */}
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<Dashboard />} />
+            <Route path="bets" element={<Bets />} />
             <Route path="transactions" element={<Transactions />} />
             <Route path="bonus" element={<Bonus />} />
             <Route path="deposit" element={<Deposit />} />
