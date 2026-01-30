@@ -1,20 +1,24 @@
-import { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
-  Home,
-  Gift,
+  Flame,
   Users,
-  Award,
-  User,
-  Wallet,
-  History,
+  Heart,
+  Gift,
+  Dices,
+  Star,
+  Spade,
+  Coins,
+  Diamond,
+  Fish,
+  Target,
+  Trophy,
+  Globe,
+  Gamepad2,
   Download,
-  Headphones,
-  Settings,
-  LogOut,
+  CircleDot,
+  MessageCircle,
   X,
-  ChevronRight,
-  Shield,
+  LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
@@ -25,29 +29,30 @@ interface HomeSidebarProps {
 }
 
 const menuItems = [
-  { title: "Home", icon: Home, path: "/" },
-  { title: "Promotion", icon: Gift, path: "/promotion" },
-  { title: "Invite Friends", icon: Users, path: "/invite" },
-  { title: "Rewards", icon: Award, path: "/reward" },
-];
-
-const accountItems = [
-  { title: "My Account", icon: User, path: "/my-account" },
-  { title: "Deposit", icon: Wallet, path: "/deposit" },
-  { title: "Withdraw", icon: Wallet, path: "/withdraw" },
-  { title: "Transaction History", icon: History, path: "/account-record" },
-  { title: "Security", icon: Shield, path: "/security" },
-];
-
-const otherItems = [
-  { title: "Download App", icon: Download, path: "/download" },
-  { title: "Support", icon: Headphones, path: "/support" },
+  { title: "Hot Games", icon: Flame, path: "/", color: "text-orange-500" },
+  { title: "Invite friends", icon: Users, path: "/invite", color: "text-blue-400" },
+  { title: "Favorites", icon: Heart, path: "/favorites", color: "text-pink-500" },
+  { title: "Promotion", icon: Gift, path: "/promotion", color: "text-yellow-500" },
+  { title: "Slots", icon: Dices, path: "/slots", color: "text-purple-400" },
+  { title: "Reward Center", icon: Star, path: "/reward", color: "text-yellow-400" },
+  { title: "Live Casino", icon: Spade, path: "/live-casino", color: "text-red-500" },
+  { title: "Manual rebate", icon: Coins, path: "/rebate", color: "text-green-400" },
+  { title: "Poker", icon: Spade, path: "/poker", color: "text-blue-500" },
+  { title: "VIP", icon: Diamond, path: "/vip", color: "text-cyan-400" },
+  { title: "Fish", icon: Fish, path: "/fish", color: "text-teal-400" },
+  { title: "Mission", icon: Target, path: "/mission", color: "text-orange-400" },
+  { title: "Sports", icon: Trophy, path: "/sports", color: "text-green-500" },
+  { title: "Language", icon: Globe, path: "/language", color: "text-blue-300" },
+  { title: "E-sports", icon: Gamepad2, path: "/esports", color: "text-purple-500" },
+  { title: "APP Download", icon: Download, path: "/download", color: "text-cyan-500" },
+  { title: "Lottery", icon: CircleDot, path: "/lottery", color: "text-red-400" },
+  { title: "Customer Service", icon: MessageCircle, path: "/support", color: "text-emerald-400" },
 ];
 
 const HomeSidebar = ({ isOpen, onClose }: HomeSidebarProps) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, signOut, isAdmin } = useAuth();
+  const { user, signOut } = useAuth();
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -75,148 +80,69 @@ const HomeSidebar = ({ isOpen, onClose }: HomeSidebarProps) => {
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-[110] w-72 bg-card border-r border-border transform transition-transform duration-300 ease-in-out flex flex-col",
+          "fixed inset-y-0 left-0 z-[110] w-[85%] max-w-sm bg-card border-r border-border transform transition-transform duration-300 ease-in-out flex flex-col",
           isOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
         {/* Header */}
-        <div className="p-4 border-b border-border flex items-center justify-between bg-gradient-to-r from-primary/10 to-transparent">
+        <div className="p-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="text-2xl font-bold text-gradient-gold">CK44</span>
             <span className="text-xl font-bold text-foreground">.COM</span>
           </div>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-secondary rounded-lg transition-colors"
+            className="p-2 hover:bg-secondary rounded-full transition-colors"
           >
-            <X className="w-5 h-5 text-muted-foreground" />
+            <X className="w-6 h-6 text-muted-foreground" />
           </button>
         </div>
 
-        {/* User Info */}
-        {user && (
-          <div className="p-4 border-b border-border bg-secondary/30">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
-                <User className="w-6 h-6 text-primary" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="font-medium text-foreground truncate">{user.email}</p>
-                <p className="text-sm text-muted-foreground">Welcome back!</p>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Navigation */}
-        <nav className="flex-1 overflow-y-auto p-3 space-y-4">
-          {/* Main Menu */}
-          <div className="space-y-1">
-            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider px-3 mb-2">Menu</p>
+        {/* Grid Menu */}
+        <nav className="flex-1 overflow-y-auto p-3">
+          <div className="grid grid-cols-2 gap-3">
             {menuItems.map((item) => (
               <button
-                key={item.path}
+                key={item.path + item.title}
                 onClick={() => handleNavigation(item.path)}
                 className={cn(
-                  "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all",
+                  "flex flex-col items-center justify-center gap-2 p-4 rounded-xl border transition-all duration-200",
+                  "hover:scale-105 hover:brightness-110 active:scale-95",
                   isActive(item.path)
-                    ? "bg-primary text-primary-foreground"
-                    : "text-foreground hover:bg-secondary"
+                    ? "bg-primary/20 border-primary"
+                    : "bg-secondary border-border hover:border-primary/50"
                 )}
               >
-                <item.icon className="w-5 h-5 flex-shrink-0" />
-                <span className="flex-1 text-left">{item.title}</span>
-                <ChevronRight className="w-4 h-4 opacity-50" />
-              </button>
-            ))}
-          </div>
-
-          {/* Account Section (only if logged in) */}
-          {user && (
-            <div className="space-y-1">
-              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider px-3 mb-2">Account</p>
-              {accountItems.map((item) => (
-                <button
-                  key={item.path}
-                  onClick={() => handleNavigation(item.path)}
-                  className={cn(
-                    "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all",
-                    isActive(item.path)
-                      ? "bg-primary text-primary-foreground"
-                      : "text-foreground hover:bg-secondary"
-                  )}
-                >
-                  <item.icon className="w-5 h-5 flex-shrink-0" />
-                  <span className="flex-1 text-left">{item.title}</span>
-                  <ChevronRight className="w-4 h-4 opacity-50" />
-                </button>
-              ))}
-            </div>
-          )}
-
-          {/* Admin Link (only for admins) */}
-          {isAdmin && (
-            <div className="space-y-1">
-              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider px-3 mb-2">Admin</p>
-              <button
-                onClick={() => handleNavigation('/admin')}
-                className={cn(
-                  "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all",
-                  location.pathname.startsWith('/admin')
-                    ? "bg-primary text-primary-foreground"
-                    : "text-foreground hover:bg-secondary"
-                )}
-              >
-                <Settings className="w-5 h-5 flex-shrink-0" />
-                <span className="flex-1 text-left">Admin Panel</span>
-                <ChevronRight className="w-4 h-4 opacity-50" />
-              </button>
-            </div>
-          )}
-
-          {/* Other */}
-          <div className="space-y-1">
-            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider px-3 mb-2">Others</p>
-            {otherItems.map((item) => (
-              <button
-                key={item.path}
-                onClick={() => handleNavigation(item.path)}
-                className={cn(
-                  "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all",
-                  isActive(item.path)
-                    ? "bg-primary text-primary-foreground"
-                    : "text-foreground hover:bg-secondary"
-                )}
-              >
-                <item.icon className="w-5 h-5 flex-shrink-0" />
-                <span className="flex-1 text-left">{item.title}</span>
-                <ChevronRight className="w-4 h-4 opacity-50" />
+                <item.icon className={cn("w-8 h-8", item.color)} />
+                <span className="text-xs font-medium text-foreground text-center leading-tight">
+                  {item.title}
+                </span>
               </button>
             ))}
           </div>
         </nav>
 
         {/* Footer */}
-        <div className="p-3 border-t border-border">
+        <div className="p-4 border-t border-border">
           {user ? (
             <button
               onClick={handleLogout}
-              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-destructive hover:bg-destructive/10 transition-colors"
+              className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-medium text-destructive bg-destructive/10 hover:bg-destructive/20 transition-colors"
             >
-              <LogOut className="w-5 h-5 flex-shrink-0" />
+              <LogOut className="w-5 h-5" />
               <span>Logout</span>
             </button>
           ) : (
-            <div className="space-y-2">
+            <div className="flex gap-3">
               <button
                 onClick={() => handleNavigation('/login')}
-                className="w-full bg-primary text-primary-foreground px-4 py-2.5 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity"
+                className="flex-1 bg-secondary text-foreground px-4 py-3 rounded-xl text-sm font-semibold hover:bg-secondary/80 transition-colors"
               >
                 Login
               </button>
               <button
                 onClick={() => handleNavigation('/register')}
-                className="w-full bg-gradient-gold text-primary-foreground px-4 py-2.5 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity"
+                className="flex-1 bg-gradient-gold text-primary-foreground px-4 py-3 rounded-xl text-sm font-semibold hover:opacity-90 transition-opacity"
               >
                 Register
               </button>
